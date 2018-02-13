@@ -11,7 +11,11 @@ For each recipient, zip code and calendar year, it calculates these three values
 ## Requires
 
 Python 3
-Bisect ,math and Sys Module
+Bisect, math, datetime and Sys Module for main program
+
+and
+
+time and contextlib module for speed test
 
 ## Input and Output
 
@@ -41,9 +45,9 @@ Work flow:
 0. Initialize by create empty donor set and recipient dictionary.
 1. Load the data in RAM, parse each line to get the relevant data.
 2. Determine if the data from the current line is valid.
-3. Checking if the current donor (name and zip code) is in our donor set. Yes means repeat donor. If not, add it to the list for future use. 
+3. Checking if the current donor (name and zip code) is in our donor set. Yes means repeat donor. If not, add it to the set for future reference. 
 4. If yes in #3, check if its correspondent recipient+year+Zip combination is a key in our recipient dictionary. If not, assign a python list with single element "Transaction_AMT" as its value.  If yes,use the bisect module to sorted-insert the "Transaction_AMT" to the list. It therefore maintains a sorted python list.
-5. Calculate the length, total amount and percentile of the "Transaction_AMT" list. 
+5. Calculate the length, total amount and percentile of the sorted "Transaction_AMT" list. 
 6. Write to the output file.
 
 ## Usage
@@ -64,7 +68,7 @@ It currently processes about one million lines in 10 seconds on my Macbook Pro (
 
 1. The python default round() function is weird: it round .5 into 0 instead of 1. We have to use math.floor(x+0.5) instead.
 
-2. We have to compromise between accuracy and speed. Addressing all edge cases uses a lot of resource and slows the program down. For instance, to check if the "date" is valid, we can either use the default time.strptime() method or simply see if the last 4 digits of the "date" string can be converted to an integer between 2015 and 2018. The former is certainly more robust but significantly slower for large data set.
+2. We have to compromise between accuracy and speed. Addressing all edge cases uses a lot of resource and slows the program down. In particular, it is tricky to handle people's name. For instance, sometimes it includes a middle name, sometimes not, and sometimes it may include the middle name as a single letter. While we could address more of these possibilities, it might not be worth it to do this for every input as they probably didn't happen very often.
 
 I think it is ultimately depends on what people care about more. For this challenge, the majority of edge cases probably arises from typos or missing information, so stringent validation could be overkill. On the other hand, political analysts probably don't care about running time difference in the seconds scale.....
 

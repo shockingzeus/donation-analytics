@@ -9,7 +9,8 @@ import sys
 import time
 import math
 import contextlib
-        
+import datetime        
+
 @contextlib.contextmanager            
 def timer(msg):
 # A timer generator to test the speed of each function. 
@@ -20,32 +21,33 @@ def timer(msg):
 
 def getdata(line):
 # read all data from a line. If there's any error, return None 
-    data = line.rstrip('\n').rsplit('|')
     try:
+        data = line.rstrip('\n').rsplit('|')
         Other = data[15]
-        CMTE = data[0]
+        CMTE = data[0].rstrip()
         if Other != "" or CMTE == "":
             CMTE = None
-        year = getyear(data[13])
+        year = getyear(data[13].rstrip())
         name = getname(data[7].rstrip())
-        zipcode = getzip(data[10])
+        zipcode = getzip(data[10].rstrip())
         AMT = getAMT(data[14])
         return CMTE, year, name, zipcode, AMT
     except:
         return None, None, None, None, None
 
 def getyear(date):
-#Get the year from date string. We could use time.strptime to be more robust, but it would be ~20 times slower.
+#Get the year from date string.
     if len(date) == 8:
         try:
 #            time.strptime(date, "%m%d%Y")
+            month = date[:2]
+            day = date[2:4]
             year = date[4:]
-            if int(year)<2019 and int(year)>2014:
-                return year
+            datetime.datetime(int(year), int(month), int(day))
+            return year
         except:
             return None
-
-       
+  
 def getzip(zipcode):
 # check if zipcode is valid. Here we simply check whether the first 5 digits is a integer.
     if len(zipcode)>=5:
