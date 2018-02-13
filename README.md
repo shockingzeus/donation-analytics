@@ -11,7 +11,7 @@ For each recipient, zip code and calendar year, it calculates these three values
 ## Requires
 
 Python 3
-Bisect ,Time, math and Sys Module
+Bisect ,math and Sys Module
 
 ## Input and Output
 
@@ -39,7 +39,7 @@ Recipients are uniquely defined by the combination of "CMTE_ID", "year" and "zip
 Work flow:
 
 0. Initialize by create empty donor set and recipient dictionary.
-1. Load the data in RAM, parse each line to get the relevant data. O(N).
+1. Load the data in RAM, parse each line to get the relevant data.
 2. Determine if the data from the current line is valid.
 3. Checking if the current donor (name and zip code) is in our donor set. Yes means repeat donor. If not, add it to the list for future use. 
 4. If yes in #3, check if its correspondent recipient+year+Zip combination is a key in our recipient dictionary. If not, assign a python list with single element "Transaction_AMT" as its value.  If yes,use the bisect module to sorted-insert the "Transaction_AMT" to the list. It therefore maintains a sorted python list.
@@ -69,3 +69,5 @@ It currently processes about one million lines in 10 seconds on my Macbook Pro (
 I think it is ultimately depends on what people care about more. For this challenge, the majority of edge cases probably arises from typos or missing information, so stringent validation could be overkill. On the other hand, political analysts probably don't care about running time difference in the seconds scale.....
 
 3. For this particular challenge, the number of donations for a recipient is generally not very large. If it is, we should consider replacing the sorted list of donation amounts by something else as python list is slow. Right now it is not necessary.
+
+4. The unit test was performed within IPython console.
